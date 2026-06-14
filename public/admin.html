@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wine Works Admin</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ── 로그인 화면 ── -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">WINE WORKS <span>The Hyundai Seoul · Admin</span></div>
+    <p class="login-title">관리자 로그인</p>
+    <p class="login-subtitle">비밀번호를 입력하세요</p>
+    <input type="password" id="pwInput" placeholder="••••••••••••" autocomplete="current-password" />
+    <button class="btn-login" onclick="doLogin()">로그인</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- ── 어드민 앱 ── -->
+<div class="admin-app" id="adminApp">
+
+  <!-- 헤더 -->
+  <header class="admin-header">
+    <div>
+      <span class="admin-header-logo">WINE WORKS<span>관리자 페이지</span></span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="admin-badge">ADMIN</span>
+      <button class="btn-logout" onclick="doLogout()">로그아웃</button>
+    </div>
+  </header>
+
+  <!-- 탭 네비게이션 -->
+  <nav class="admin-tabs">
+    <button class="tab-btn active" onclick="switchTab('wines')">🍷 와인 관리</button>
+    <button class="tab-btn" onclick="switchTab('foods')">🍽️ 음식 관리</button>
+    <button class="tab-btn" onclick="switchTab('logs')">📋 추천 이력</button>
+    <button class="tab-btn" onclick="switchTab('feedbacks')">⭐ 피드백 현황</button>
+  </nav>
+
+  <!-- 컨텐츠 -->
+  <main class="admin-content">
+
+    <!-- ① 와인 관리 -->
+    <section class="tab-panel active" id="panel-wines">
+      <div class="section-header">
+        <h2 class="section-title">와인 관리 <span id="wineCount"></span></h2>
+        <button class="btn-primary" onclick="openWineModal(null)">+ 와인 추가</button>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterWines('all', this)">전체</button>
+        <button class="filter-btn" onclick="filterWines('Bubble', this)">Bubble</button>
+        <button class="filter-btn" onclick="filterWines('White', this)">White</button>
+        <button class="filter-btn" onclick="filterWines('Red', this)">Red</button>
+        <button class="filter-btn" onclick="filterWines('Sweet', this)">Sweet</button>
+        <button class="filter-btn" onclick="filterWines('Non-Alcoholic', this)">Non-Alcoholic</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>이름</th>
+              <th>타입</th>
+              <th>산지</th>
+              <th>품종</th>
+              <th>잔 가격</th>
+              <th>보틀 가격</th>
+              <th>판매</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="wineTableBody">
+            <tr><td colspan="9"><div class="spinner-wrap"><div class="spinner"></div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ② 음식 관리 -->
+    <section class="tab-panel" id="panel-foods">
+      <div class="section-header">
+        <h2 class="section-title">음식 관리 <span id="foodCount"></span></h2>
+        <button class="btn-primary" onclick="openFoodModal(null)">+ 음식 추가</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>이름</th>
+              <th>카테고리</th>
+              <th>판매</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="foodTableBody">
+            <tr><td colspan="5"><div class="spinner-wrap"><div class="spinner"></div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ③ 추천 이력 -->
+    <section class="tab-panel" id="panel-logs">
+      <div class="section-header">
+        <h2 class="section-title">추천 이력 <span id="logCount"></span></h2>
+      </div>
+      <div class="detail-layout">
+        <div>
+          <div class="log-list" id="logList">
+            <div class="spinner-wrap"><div class="spinner"></div></div>
+          </div>
+        </div>
+        <div id="logDetailWrap">
+          <div class="empty-state">
+            <div class="icon">👆</div>
+            <p>왼쪽에서 세션을 선택하면<br>피드백을 입력할 수 있어요</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 피드백 현황 -->
+    <section class="tab-panel" id="panel-feedbacks">
+      <div class="section-header">
+        <h2 class="section-title">피드백 현황</h2>
+      </div>
+      <div id="summaryGrid" class="summary-grid">
+        <div class="spinner-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>
+      </div>
+      <h3 style="font-size:15px; font-weight:700; margin-bottom:12px; color:#1A1A1A;">전체 피드백 목록</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>날짜</th>
+              <th>음식 조합</th>
+              <th>와인</th>
+              <th>점수</th>
+              <th>코멘트</th>
+            </tr>
+          </thead>
+          <tbody id="feedbackTableBody">
+            <tr><td colspan="5"><div class="spinner-wrap"><div class="spinner"></div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ── 와인 모달 ── -->
+<div class="modal-overlay" id="wineModal">
+  <div class="modal">
+    <h3 class="modal-title" id="wineModalTitle">와인 추가</h3>
+    <input type="hidden" id="wineModalId" />
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">와인 ID</label>
+        <input type="text" class="form-input" id="wf_wine_id" placeholder="예: R15" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">타입</label>
+        <select class="form-select" id="wf_type">
+          <option value="Red">Red</option>
+          <option value="White">White</option>
+          <option value="Bubble">Bubble</option>
+          <option value="Sweet">Sweet</option>
+          <option value="Non-Alcoholic">Non-Alcoholic</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">이름 (영문)</label>
+      <input type="text" class="form-input" id="wf_name" placeholder="예: Chateau Margaux 2018" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">이름 (한글)</label>
+      <input type="text" class="form-input" id="wf_name_kr" placeholder="예: 샤또 마르고 2018" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">산지 (Region)</label>
+        <input type="text" class="form-input" id="wf_region" placeholder="예: Bordeaux, France" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">품종 (Grape)</label>
+        <input type="text" class="form-input" id="wf_grape" placeholder="예: Cabernet Sauvignon" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">향미 노트 (Flavor Notes)</label>
+      <input type="text" class="form-input" id="wf_flavor_notes" placeholder="예: 블랙체리, 삼나무, 바닐라" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">잔 가격 (원)</label>
+        <input type="number" class="form-input" id="wf_price_glass" placeholder="예: 18000" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">보틀 가격 (원)</label>
+        <input type="number" class="form-input" id="wf_price_bottle" placeholder="예: 85000" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('wineModal')">취소</button>
+      <button class="btn-primary" onclick="saveWine()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 음식 모달 ── -->
+<div class="modal-overlay" id="foodModal">
+  <div class="modal">
+    <h3 class="modal-title" id="foodModalTitle">음식 추가</h3>
+    <input type="hidden" id="foodModalId" />
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">음식 ID</label>
+        <input type="text" class="form-input" id="ff_food_id" placeholder="예: F25" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">카테고리</label>
+        <input type="text" class="form-input" id="ff_category" placeholder="예: 스테이크" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">음식 이름</label>
+      <input type="text" class="form-input" id="ff_name" placeholder="예: 채끝 스테이크" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('foodModal')">취소</button>
+      <button class="btn-primary" onclick="saveFood()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 토스트 -->
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
