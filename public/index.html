@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wine Works</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- 사이드바 -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">WINE WORKS <span>The Hyundai Seoul</span></div>
+    <div class="sidebar-table">TABLE <strong>08</strong></div>
+    <nav class="category-list" id="categoryList">
+      <button class="category-item active" onclick="showCategory('스테이크')">스테이크</button>
+      <button class="category-item" onclick="showCategory('파스타')">파스타</button>
+      <button class="category-item" onclick="showCategory('피자')">피자</button>
+      <button class="category-item" onclick="showCategory('해산물')">해산물</button>
+      <button class="category-item" onclick="showCategory('사이드')">사이드</button>
+      <button class="category-item" onclick="showCategory('디저트')">디저트</button>
+      <button class="category-item" onclick="showCategory('와인')">🍷 와인</button>
+    </nav>
+  </aside>
+
+  <!-- 메인 -->
+  <div class="main">
+
+    <!-- 메뉴 화면 -->
+    <div id="menuScreen">
+      <!-- 상단 바 -->
+      <div class="top-bar">
+        <div class="top-bar-title" id="categoryTitle">스테이크 <span>(Steak)</span></div>
+        <div class="top-bar-actions">
+          <button class="btn-staff">직원호출 🔔</button>
+          <button class="cart-btn" onclick="showCart()">
+            🛒 장바구니
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 메뉴 그리드 -->
+      <div class="menu-area">
+        <div class="menu-grid" id="menuGrid"></div>
+      </div>
+
+      <!-- 하단 버튼 -->
+      <div class="bottom-bar">
+        <button class="btn-wine-recommend" onclick="showCategory('와인')">🍷 와인 추천받기</button>
+        <button class="btn-cart" onclick="showCart()">장바구니 확인 →</button>
+      </div>
+    </div>
+
+    <!-- 장바구니 화면 -->
+    <div class="cart-screen" id="cartScreen">
+      <div class="cart-header">
+        <button class="btn-back" onclick="showMenu()">←</button>
+        <h2>장바구니</h2>
+      </div>
+
+      <div class="cart-items" id="cartItems"></div>
+
+      <!-- Touch 3: 와인 추천 섹션 -->
+      <div class="wine-recommend-section">
+        <h3>🍷 이 음식들과 잘 어울리는 와인</h3>
+        <div id="wineRecommendArea">
+          <div class="wine-loading">
+            <div class="dots"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>합계</span>
+          <span id="cartTotal">0 원</span>
+        </div>
+        <button class="btn-order">주문하기</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

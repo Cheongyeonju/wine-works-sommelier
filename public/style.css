@@ -1,0 +1,302 @@
+/* ── Reset & Base ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Apple SD Gothic Neo', -apple-system, sans-serif;
+  background: #F4F1EB;
+  color: #1A1A1A;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Layout ── */
+.app { display: flex; height: 100vh; }
+
+/* ── 사이드바 ── */
+.sidebar {
+  width: 140px;
+  background: #1A3A2A;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  flex-shrink: 0;
+}
+.sidebar-logo {
+  color: #F4F1EB;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding: 0 12px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.sidebar-logo span { display: block; font-size: 10px; font-weight: 400; opacity: 0.6; margin-top: 2px; }
+.sidebar-table {
+  color: #F4F1EB;
+  font-size: 11px;
+  text-align: center;
+  padding: 12px;
+  opacity: 0.6;
+}
+.sidebar-table strong { display: block; font-size: 20px; font-weight: 700; opacity: 1; color: #F4F1EB; }
+.category-list { margin-top: 8px; flex: 1; }
+.category-item {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.category-item:hover { color: #F4F1EB; background: rgba(255,255,255,0.05); }
+.category-item.active {
+  color: #F4F1EB;
+  background: rgba(255,255,255,0.12);
+  font-weight: 600;
+  border-left: 3px solid #6B4E9B;
+}
+
+/* ── 메인 영역 ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ── 상단 헤더 ── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #fff;
+  border-bottom: 1px solid #E8E2D8;
+}
+.top-bar-title { font-size: 18px; font-weight: 600; color: #1A1A1A; }
+.top-bar-title span { font-size: 13px; font-weight: 400; color: #888; margin-left: 6px; }
+.top-bar-actions { display: flex; gap: 10px; align-items: center; }
+.btn-staff {
+  background: #1A3A2A;
+  color: #F4F1EB;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.cart-btn {
+  position: relative;
+  background: #F4F1EB;
+  border: 1px solid #E8E2D8;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #1A1A1A;
+}
+.cart-count {
+  position: absolute;
+  top: -6px; right: -6px;
+  background: #6B4E9B;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── 메뉴 그리드 ── */
+.menu-area { flex: 1; overflow-y: auto; padding: 16px; }
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.menu-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #E8E2D8;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+.menu-card:hover { border-color: #1A3A2A; transform: translateY(-1px); }
+.menu-card:active { transform: translateY(0); }
+.menu-card-img {
+  width: 100%; aspect-ratio: 1;
+  background: #F4F1EB;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+}
+.menu-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.menu-card-body { padding: 10px 12px; }
+.menu-card-name { font-size: 13px; font-weight: 600; color: #1A1A1A; margin-bottom: 4px; }
+.menu-card-price { font-size: 13px; color: #1A3A2A; font-weight: 700; }
+
+/* 추천 뱃지 */
+.badge-recommend {
+  position: absolute;
+  top: 8px; left: 8px;
+  background: #6B4E9B;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.05em;
+}
+
+/* ── 하단 버튼 바 ── */
+.bottom-bar {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #fff;
+  border-top: 1px solid #E8E2D8;
+}
+.btn-wine-recommend {
+  flex: 1;
+  background: #6B4E9B;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-wine-recommend:hover { background: #5A3D8A; }
+.btn-cart {
+  flex: 1;
+  background: #1A3A2A;
+  color: #F4F1EB;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-cart:hover { background: #142E20; }
+
+/* ── 장바구니 화면 ── */
+.cart-screen { display: none; flex-direction: column; height: 100%; }
+.cart-screen.active { display: flex; }
+.cart-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #E8E2D8;
+  display: flex; align-items: center; gap: 12px;
+}
+.btn-back {
+  background: none; border: none;
+  font-size: 20px; cursor: pointer; color: #1A3A2A;
+}
+.cart-header h2 { font-size: 18px; font-weight: 600; }
+.cart-items { flex: 1; overflow-y: auto; padding: 16px; }
+.cart-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #F0EBE2;
+}
+.cart-item-name { font-size: 14px; font-weight: 500; }
+.cart-item-price { font-size: 14px; color: #1A3A2A; font-weight: 600; }
+.cart-item-remove {
+  background: none; border: none;
+  color: #ccc; font-size: 18px; cursor: pointer; margin-left: 12px;
+}
+
+/* 추천 와인 섹션 (Touch 3) */
+.wine-recommend-section {
+  margin: 16px;
+  background: #1A3A2A;
+  border-radius: 10px;
+  padding: 16px;
+}
+.wine-recommend-section h3 {
+  color: #F4F1EB;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.wine-cards-row { display: flex; gap: 10px; overflow-x: auto; }
+.wine-rec-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 160px;
+  flex-shrink: 0;
+}
+.wine-rec-card-name { font-size: 13px; font-weight: 600; color: #F4F1EB; margin-bottom: 2px; }
+.wine-rec-card-info { font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+.wine-rec-card-foods { font-size: 11px; color: #C4A97A; margin-bottom: 10px; line-height: 1.5; }
+.btn-add-wine {
+  width: 100%;
+  background: #6B4E9B;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.wine-loading {
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* 장바구니 하단 */
+.cart-footer { padding: 16px; border-top: 1px solid #E8E2D8; }
+.cart-total {
+  display: flex; justify-content: space-between;
+  font-size: 16px; font-weight: 700;
+  margin-bottom: 12px;
+}
+.btn-order {
+  width: 100%;
+  background: #1A3A2A;
+  color: #F4F1EB;
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ── 와인 탭 추천 영역 (Touch 1) ── */
+.wine-tab-recommend {
+  background: #1A3A2A;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.wine-tab-recommend h3 {
+  color: #F4F1EB;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.wine-tab-recommend .empty-msg {
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+/* ── 로딩 애니메이션 ── */
+.dots span {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.6);
+  animation: blink 1.2s infinite;
+  margin: 0 2px;
+}
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%,80%,100%{opacity:0.2} 40%{opacity:1} }
