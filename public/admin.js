@@ -668,3 +668,15 @@ function showToast(msg, isError = false) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
+
+function togglePw() {
+  const input = document.getElementById('pwInput');
+  const btn = document.getElementById('pwToggle');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.style.opacity = '1';
+  } else {
+    input.type = 'password';
+    btn.style.opacity = '0.4';
+  }
+}

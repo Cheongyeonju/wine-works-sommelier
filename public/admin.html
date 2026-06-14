@@ -14,7 +14,10 @@
     <div class="login-logo">WINE WORKS <span>The Hyundai Seoul · Admin</span></div>
     <p class="login-title">관리자 로그인</p>
     <p class="login-subtitle">비밀번호를 입력하세요</p>
-    <input type="password" id="pwInput" placeholder="••••••••••••" autocomplete="current-password" />
+    <div class="pw-wrap">
+      <input type="password" id="pwInput" placeholder="••••••••••••" autocomplete="current-password" />
+      <button type="button" id="pwToggle" onclick="togglePw()">👁</button>
+    </div>
     <button class="btn-login" onclick="doLogin()">로그인</button>
     <div class="login-error" id="loginError"></div>
   </div>

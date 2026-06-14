@@ -48,9 +48,13 @@ body {
   color: #888;
   margin-bottom: 24px;
 }
-.login-box input[type="password"] {
+.pw-wrap {
+  position: relative;
+  margin-bottom: 12px;
+}
+#pwInput {
   width: 100%;
-  padding: 12px 14px;
+  padding: 12px 40px 12px 14px;
   border: 1.5px solid #E8E2D8;
   border-radius: 8px;
   font-size: 15px;
@@ -60,10 +64,22 @@ body {
   outline: none;
   text-align: center;
   letter-spacing: 0.2em;
-  margin-bottom: 12px;
 }
-.login-box input[type="password"]:focus {
+#pwInput:focus {
   border-color: #1A3A2A;
+}
+#pwToggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #aaa;
+  padding: 0;
+  line-height: 1;
 }
 .btn-login {
   width: 100%;
