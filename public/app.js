@@ -172,9 +172,10 @@ async function fetchRecommendations() {
       `${CONFIG.SUPABASE_URL}/functions/v1/recommend`,
       {
         method: 'POST',
-        headers: {
+       headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
+          'apikey': CONFIG.SUPABASE_ANON_KEY,
         },
         body: JSON.stringify({ ordered_foods: cartFoods }),
       }
