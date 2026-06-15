@@ -1,4 +1,3 @@
-// ── 메뉴 데이터 ──
 const MENUS = {
   '스테이크': [
     { name: '립아이 스테이크', price: 65000, emoji: '🥩' },
@@ -33,49 +32,67 @@ const MENUS = {
   '디저트': [
     { name: '디저트 플래터', price: 18000, emoji: '🍮' },
   ],
-  '와인': [],
 };
 
-// ── 장바구니 ──
+const WINES = [
+  { wine_id: 'B01', name_kr: '페렐라다 까바 브뤼', type: 'Bubble', region: 'Spain', grape: 'Xarel-lo, Macabeo', price_bottle: 69 },
+  { wine_id: 'B02', name_kr: '샴페인 가스통 드 끌로', type: 'Bubble', region: 'France', grape: 'Pinot noir, Chardonnay', price_bottle: 88 },
+  { wine_id: 'W01', name_kr: '플뤼거 리슬링', type: 'White', region: 'Germany', grape: 'Riesling', price_bottle: 65 },
+  { wine_id: 'W02', name_kr: '베네데 카타라토', type: 'White', region: 'Italy', grape: 'Catarratto', price_bottle: 52 },
+  { wine_id: 'W03', name_kr: '파운', type: 'White', region: 'France', grape: 'Viognier, Chardonnay', price_bottle: 61 },
+  { wine_id: 'W04', name_kr: '옐랜드 소비뇽 블랑', type: 'White', region: 'New Zealand', grape: 'Sauvignon Blanc', price_bottle: 70 },
+  { wine_id: 'W05', name_kr: '칼리베다 샤도네이', type: 'White', region: 'USA', grape: 'Chardonnay', price_bottle: 70 },
+  { wine_id: 'W06', name_kr: '자블레 비오니에', type: 'White', region: 'France', grape: 'Viognier', price_bottle: 68 },
+  { wine_id: 'W07', name_kr: '킹스 오브 프로히비션 샤르도네', type: 'White', region: 'Australia', grape: 'Chardonnay', price_bottle: 69 },
+  { wine_id: 'R01', name_kr: '부샤 헤리티지 피노누아', type: 'Red', region: 'France', grape: 'Pinot Noir', price_bottle: 73 },
+  { wine_id: 'R02', name_kr: '이 본죠르노 프리미티보', type: 'Red', region: 'Italy', grape: 'Primitivo', price_bottle: 73 },
+  { wine_id: 'R03', name_kr: '티앤티 까베르네 소비뇽', type: 'Red', region: 'USA', grape: 'Cabernet Sauvignon', price_bottle: 50 },
+  { wine_id: 'R04', name_kr: '꼬또 데 이마스 리제르바', type: 'Red', region: 'Spain', grape: 'Tempranillo', price_bottle: 73 },
+  { wine_id: 'R05', name_kr: '옐랜드 피노누아 리저브', type: 'Red', region: 'New Zealand', grape: 'Pinot Noir', price_bottle: 64 },
+  { wine_id: 'R07', name_kr: '돈나타 네로 다볼라', type: 'Red', region: 'Italy', grape: 'Nero Davola', price_bottle: 52 },
+  { wine_id: 'R09', name_kr: '미미 키안티 수페리오레', type: 'Red', region: 'Italy', grape: 'Sangiovese', price_bottle: 72 },
+  { wine_id: 'S01', name_kr: '리히터 리슬링 슈페트레제', type: 'Sweet', region: 'Germany', grape: 'Riesling', price_bottle: 73 },
+  { wine_id: 'NA01', name_kr: '논알콜 화이트', type: 'Non-Alcoholic', region: 'Australia', grape: 'White Blended', price_bottle: 70 },
+  { wine_id: 'NA02', name_kr: '자카니니 논알콜 레드', type: 'Non-Alcoholic', region: 'Italy', grape: 'Montepulciano', price_bottle: 45 },
+];
+
 let cart = [];
 let currentCategory = '스테이크';
 let wineRecommendations = null;
+let isCartScreen = false;
 
-// ── 카테고리 표시 ──
-function showCategory(category) {
+// ── 카테고리 전환 ──
+function showCategory(category, btn) {
   currentCategory = category;
+  document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
+  if (btn) btn.classList.add('active');
 
-  document.querySelectorAll('.category-item').forEach(el => {
-    el.classList.toggle('active', el.textContent.replace('🍷 ', '') === category);
-  });
+  // 장바구니 화면에서 메뉴 탭 클릭 시 메뉴 화면으로 이동
+  if (isCartScreen) showMenu();
 
   const titles = {
-    '스테이크': '스테이크 (Steak)',
-    '파스타': '파스타 (Pasta)',
-    '피자': '피자 (Pizza)',
-    '해산물': '해산물 (Seafood)',
-    '사이드': '사이드 (Side)',
-    '디저트': '디저트 (Dessert)',
-    '와인': '와인 (Wine)',
+    '스테이크': '스테이크 <span>(Steak)</span>',
+    '파스타': '파스타 <span>(Pasta)</span>',
+    '피자': '피자 <span>(Pizza)</span>',
+    '해산물': '해산물 <span>(Seafood)</span>',
+    '사이드': '사이드 <span>(Side)</span>',
+    '디저트': '디저트 <span>(Dessert)</span>',
+    '와인': '와인 <span>(Wine)</span>',
   };
-  document.getElementById('categoryTitle').innerHTML =
-    titles[category] + (category !== '와인' ? '' : '');
-
+  document.getElementById('categoryTitle').innerHTML = titles[category] || category;
   renderMenu(category);
 }
 
 // ── 메뉴 렌더링 ──
 function renderMenu(category) {
   const grid = document.getElementById('menuGrid');
-
   if (category === '와인') {
     renderWineTab();
     return;
   }
-
   const items = MENUS[category] || [];
   grid.innerHTML = items.map(item => `
-    <div class="menu-card" onclick="addToCart('${item.name}', ${item.price})">
+    <div class="menu-card" onclick="addToCart('${item.name}', ${item.price}, this)">
       <div class="menu-card-img">${item.emoji}</div>
       <div class="menu-card-body">
         <div class="menu-card-name">${item.name}</div>
@@ -85,148 +102,42 @@ function renderMenu(category) {
   `).join('');
 }
 
-// ── 와인 탭 (Touch 1) ──
-async function renderWineTab() {
+// ── 와인 탭 렌더링 ──
+function renderWineTab() {
   const grid = document.getElementById('menuGrid');
-  const cartFoods = cart.map(c => c.name);
+  const recIds = (wineRecommendations || []).map(r => r.wine_id);
 
-  // 추천 영역
-  let recommendHTML = '';
-  if (cartFoods.length === 0) {
-    recommendHTML = `
-      <div class="wine-tab-recommend">
-        <h3>🍷 추천 와인</h3>
-        <div class="empty-msg">아직 선택하신 메뉴가 없어요.<br>메뉴를 먼저 담아주시면 어울리는 와인을 추천해드릴게요 🍷</div>
-      </div>`;
-  } else {
-    if (!wineRecommendations) {
-      recommendHTML = `
-        <div class="wine-tab-recommend">
-          <h3>🍷 추천 와인</h3>
-          <div class="empty-msg"><div class="dots"><span></span><span></span><span></span></div></div>
-        </div>`;
-      grid.innerHTML = recommendHTML + getAllWineCards([]);
-      await fetchRecommendations();
-      return;
-    } else {
-      recommendHTML = `<div class="wine-tab-recommend">
-        <h3>🍷 담으신 메뉴에 어울리는 와인</h3>
-        <div class="wine-cards-row">
-          ${wineRecommendations.map(w => `
-            <div class="wine-rec-card">
-              <div class="badge-recommend">추천</div>
-              <div class="wine-rec-card-name">${w.name_kr}</div>
-              <div class="wine-rec-card-info">${w.region} · ${w.grape}</div>
-              <div class="wine-rec-card-foods">🍽 ${w.matching_foods.join(', ')}</div>
-              <button class="btn-add-wine" onclick="addToCart('${w.name_kr}', 0)">+ 담기</button>
-            </div>
-          `).join('')}
-        </div>
-      </div>`;
-    }
-  }
-
-  grid.innerHTML = recommendHTML + getAllWineCards(wineRecommendations || []);
-}
-
-function getAllWineCards(recs) {
-  const recIds = recs.map(r => r.wine_id);
-  const allWines = [
-    { wine_id: 'B01', name_kr: '페렐라다 까바 브뤼', type: 'Bubble', region: 'Spain', price_bottle: 69 },
-    { wine_id: 'B02', name_kr: '샴페인 가스통 드 끌로', type: 'Bubble', region: 'France', price_bottle: 88 },
-    { wine_id: 'W01', name_kr: '플뤼거 리슬링', type: 'White', region: 'Germany', price_bottle: 65 },
-    { wine_id: 'W02', name_kr: '베네데 카타라토', type: 'White', region: 'Italy', price_bottle: 52 },
-    { wine_id: 'W03', name_kr: '파운', type: 'White', region: 'France', price_bottle: 61 },
-    { wine_id: 'W05', name_kr: '칼리베다 샤도네이', type: 'White', region: 'USA', price_bottle: 70 },
-    { wine_id: 'R01', name_kr: '부샤 헤리티지 피노누아', type: 'Red', region: 'France', price_bottle: 73 },
-    { wine_id: 'R03', name_kr: '티앤티 까베르네 소비뇽', type: 'Red', region: 'USA', price_bottle: 50 },
-    { wine_id: 'R04', name_kr: '꼬또 데 이마스 리제르바', type: 'Red', region: 'Spain', price_bottle: 73 },
-    { wine_id: 'R07', name_kr: '돈나타 네로 다볼라', type: 'Red', region: 'Italy', price_bottle: 52 },
-    { wine_id: 'R09', name_kr: '미미 키안티 수페리오레', type: 'Red', region: 'Italy', price_bottle: 72 },
-    { wine_id: 'S01', name_kr: '리히터 리슬링 슈페트레제', type: 'Sweet', region: 'Germany', price_bottle: 73 },
-    { wine_id: 'NA01', name_kr: '논알콜 화이트', type: 'Non-Alc', region: 'Australia', price_bottle: 70 },
-    { wine_id: 'NA02', name_kr: '자카니니 논알콜 레드', type: 'Non-Alc', region: 'Italy', price_bottle: 45 },
-  ];
-
-  return `<div class="menu-grid">` + allWines.map(w => {
+  grid.innerHTML = WINES.map(w => {
     const isRec = recIds.includes(w.wine_id);
     return `
-      <div class="menu-card" onclick="addToCart('${w.name_kr}', ${w.price_bottle * 1000})">
+      <div class="menu-card" onclick="addToCart('${w.name_kr}', ${w.price_bottle * 1000}, this)">
         ${isRec ? '<div class="badge-recommend">추천</div>' : ''}
         <div class="menu-card-img">🍷</div>
         <div class="menu-card-body">
+          <span class="badge-wine-type badge-${w.type}">${w.type}</span>
           <div class="menu-card-name">${w.name_kr}</div>
-          <div class="menu-card-price" style="color:#888;font-size:11px;">${w.type} · ${w.region}</div>
+          <div class="menu-card-price" style="color:#888;font-size:11px;">${w.region} · ${w.grape}</div>
+          <div class="menu-card-price">${w.price_bottle.toLocaleString()}천 원</div>
         </div>
       </div>`;
-  }).join('') + `</div>`;
-}
-
-// ── Edge Function 호출 ──
-async function fetchRecommendations() {
-  const cartFoods = cart.map(c => c.name);
-  if (cartFoods.length === 0) return;
-
-  try {
-    const res = await fetch(
-      `${CONFIG.SUPABASE_URL}/functions/v1/recommend`,
-      {
-        method: 'POST',
-       headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
-          'apikey': CONFIG.SUPABASE_ANON_KEY,
-        },
-        body: JSON.stringify({ ordered_foods: cartFoods }),
-      }
-    );
-    const data = await res.json();
-    if (data.recommendations) {
-      wineRecommendations = data.recommendations;
-      updateWineRecommendUI(data.recommendations);
-    }
-  } catch (e) {
-    console.error('추천 오류:', e);
-  }
-}
-
-// ── 추천 UI 업데이트 ──
-function updateWineRecommendUI(recs) {
-  // Touch 3 장바구니 화면
-  const area = document.getElementById('wineRecommendArea');
-  if (area) {
-    area.innerHTML = `<div class="wine-cards-row">
-      ${recs.map(w => `
-        <div class="wine-rec-card">
-          <div class="wine-rec-card-name">${w.name_kr}</div>
-          <div class="wine-rec-card-info">${w.region} · ${w.grape}</div>
-          <div class="wine-rec-card-foods">🍽 ${w.matching_foods.join(', ')}</div>
-          <button class="btn-add-wine" onclick="addToCart('${w.name_kr}', 0)">+ 주문에 추가</button>
-        </div>
-      `).join('')}
-    </div>`;
-  }
-
-  // Touch 1 와인 탭 갱신
-  if (currentCategory === '와인') renderWineTab();
+  }).join('');
 }
 
 // ── 장바구니 담기 ──
-function addToCart(name, price) {
+function addToCart(name, price, el) {
   const existing = cart.find(c => c.name === name);
   if (existing) {
     existing.qty += 1;
   } else {
     cart.push({ name, price, qty: 1 });
   }
-  wineRecommendations = null; // 음식 변경 시 추천 초기화
+  wineRecommendations = null;
   updateCartCount();
 
-  // 시각 피드백
-  const btn = event.currentTarget;
-  if (btn) {
-    btn.style.borderColor = '#1A3A2A';
-    setTimeout(() => btn.style.borderColor = '', 300);
+  // 클릭 효과 (0.5초 후 제거)
+  if (el) {
+    el.classList.add('clicked');
+    setTimeout(() => el.classList.remove('clicked'), 400);
   }
 }
 
@@ -235,33 +146,39 @@ function updateCartCount() {
   document.getElementById('cartCount').textContent = total;
 }
 
-// ── 장바구니 화면 ──
+// ── 화면 전환 ──
 function showCart() {
+  isCartScreen = true;
   document.getElementById('menuScreen').style.display = 'none';
   document.getElementById('cartScreen').classList.add('active');
   renderCart();
-  fetchRecommendations();
+  if (cart.length > 0) fetchRecommendations();
 }
 
 function showMenu() {
+  isCartScreen = false;
   document.getElementById('menuScreen').style.display = '';
   document.getElementById('cartScreen').classList.remove('active');
+  renderMenu(currentCategory);
 }
 
+// ── 장바구니 렌더링 ──
 function renderCart() {
   const el = document.getElementById('cartItems');
+  const wineArea = document.getElementById('wineRecommendArea');
+
   if (cart.length === 0) {
-    el.innerHTML = '<div style="text-align:center;color:#aaa;padding:40px 0;">장바구니가 비었습니다</div>';
+    el.innerHTML = '<div style="text-align:center;color:#aaa;padding:40px 0;font-size:14px;">장바구니가 비었습니다</div>';
     document.getElementById('cartTotal').textContent = '0 원';
-    document.getElementById('wineRecommendArea').innerHTML =
-      '<div class="wine-loading" style="color:rgba(255,255,255,0.4)">음식을 담으면 어울리는 와인을 추천해드려요</div>';
+    wineArea.innerHTML = '<div class="wine-loading" style="color:rgba(255,255,255,0.4);font-size:13px;">음식을 담으면 어울리는 와인을 추천해드려요</div>';
     return;
   }
 
   el.innerHTML = cart.map((c, i) => `
     <div class="cart-item">
       <div>
-        <div class="cart-item-name">${c.name} × ${c.qty}</div>
+        <div class="cart-item-name">${c.name}</div>
+        <div class="cart-item-qty">수량 ${c.qty}개</div>
       </div>
       <div style="display:flex;align-items:center">
         <div class="cart-item-price">${(c.price * c.qty).toLocaleString()} 원</div>
@@ -279,8 +196,77 @@ function removeFromCart(i) {
   wineRecommendations = null;
   updateCartCount();
   renderCart();
-  fetchRecommendations();
+
+  // 장바구니 비면 추천 초기화
+  if (cart.length === 0) {
+    document.getElementById('wineRecommendArea').innerHTML =
+      '<div class="wine-loading" style="color:rgba(255,255,255,0.4);font-size:13px;">음식을 담으면 어울리는 와인을 추천해드려요</div>';
+  } else {
+    fetchRecommendations();
+  }
+}
+
+// ── Edge Function 호출 ──
+async function fetchRecommendations() {
+  if (cart.length === 0) {
+    document.getElementById('wineRecommendArea').innerHTML =
+      '<div class="wine-loading" style="color:rgba(255,255,255,0.4);font-size:13px;">음식을 담으면 어울리는 와인을 추천해드려요</div>';
+    return;
+  }
+
+  document.getElementById('wineRecommendArea').innerHTML =
+    '<div class="wine-loading"><div class="dots"><span></span><span></span><span></span></div></div>';
+
+  const cartFoods = cart.map(c => c.name);
+
+  try {
+    const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/recommend`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
+        'apikey': CONFIG.SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify({ ordered_foods: cartFoods }),
+    });
+    const data = await res.json();
+    if (data.recommendations) {
+      wineRecommendations = data.recommendations;
+      updateWineUI(data.recommendations);
+    }
+  } catch (e) {
+    document.getElementById('wineRecommendArea').innerHTML =
+      '<div class="wine-loading" style="color:rgba(255,100,100,0.7);font-size:13px;">추천을 불러오지 못했습니다</div>';
+  }
+}
+
+// ── 추천 UI 업데이트 ──
+function updateWineUI(recs) {
+  const area = document.getElementById('wineRecommendArea');
+  if (!area) return;
+
+  area.innerHTML = `<div class="wine-cards-row">
+    ${recs.map(w => `
+      <div class="wine-rec-card">
+        <button class="btn-add-wine" onclick="addToCart('${w.name_kr}', ${getPriceByWineId(w.wine_id) * 1000}, null)">+</button>
+        <div class="wine-rec-card-content">
+          <span class="badge-wine-type badge-${w.type || 'White'}">${w.type || 'Wine'}</span>
+          <div class="wine-rec-card-name">${w.name_kr}</div>
+          <div class="wine-rec-card-info">${w.region} · ${w.grape}</div>
+          <div class="wine-rec-card-price">Bottle ${getPriceByWineId(w.wine_id).toLocaleString()}천 원</div>
+        </div>
+      </div>
+    `).join('')}
+  </div>`;
+
+  if (currentCategory === '와인') renderWineTab();
+}
+
+function getPriceByWineId(id) {
+  const w = WINES.find(w => w.wine_id === id);
+  return w ? w.price_bottle : 0;
 }
 
 // ── 초기 렌더링 ──
-showCategory('스테이크');
+const firstBtn = document.querySelector('.category-item');
+showCategory('스테이크', firstBtn);

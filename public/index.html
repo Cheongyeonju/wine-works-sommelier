@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wine Works</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,14 +16,18 @@
     <div class="sidebar-logo">WINE WORKS <span>The Hyundai Seoul</span></div>
     <div class="sidebar-table">TABLE <strong>08</strong></div>
     <nav class="category-list" id="categoryList">
-      <button class="category-item active" onclick="showCategory('스테이크')">스테이크</button>
-      <button class="category-item" onclick="showCategory('파스타')">파스타</button>
-      <button class="category-item" onclick="showCategory('피자')">피자</button>
-      <button class="category-item" onclick="showCategory('해산물')">해산물</button>
-      <button class="category-item" onclick="showCategory('사이드')">사이드</button>
-      <button class="category-item" onclick="showCategory('디저트')">디저트</button>
-      <button class="category-item" onclick="showCategory('와인')">🍷 와인</button>
+      <button class="category-item active" onclick="showCategory('스테이크', this)">스테이크</button>
+      <button class="category-item" onclick="showCategory('파스타', this)">파스타</button>
+      <button class="category-item" onclick="showCategory('피자', this)">피자</button>
+      <button class="category-item" onclick="showCategory('해산물', this)">해산물</button>
+      <button class="category-item" onclick="showCategory('사이드', this)">사이드</button>
+      <button class="category-item" onclick="showCategory('디저트', this)">디저트</button>
+      <button class="category-item" onclick="showCategory('와인', this)">🍷 와인</button>
     </nav>
+    <button class="sidebar-cart-btn" onclick="showCart()">
+      🛒 장바구니
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
   </aside>
 
   <!-- 메인 -->
@@ -29,27 +35,14 @@
 
     <!-- 메뉴 화면 -->
     <div id="menuScreen">
-      <!-- 상단 바 -->
       <div class="top-bar">
         <div class="top-bar-title" id="categoryTitle">스테이크 <span>(Steak)</span></div>
         <div class="top-bar-actions">
           <button class="btn-staff">직원호출 🔔</button>
-          <button class="cart-btn" onclick="showCart()">
-            🛒 장바구니
-            <span class="cart-count" id="cartCount">0</span>
-          </button>
         </div>
       </div>
-
-      <!-- 메뉴 그리드 -->
       <div class="menu-area">
         <div class="menu-grid" id="menuGrid"></div>
-      </div>
-
-      <!-- 하단 버튼 -->
-      <div class="bottom-bar">
-        <button class="btn-wine-recommend" onclick="showCategory('와인')">🍷 와인 추천받기</button>
-        <button class="btn-cart" onclick="showCart()">장바구니 확인 →</button>
       </div>
     </div>
 
@@ -59,10 +52,7 @@
         <button class="btn-back" onclick="showMenu()">←</button>
         <h2>장바구니</h2>
       </div>
-
       <div class="cart-items" id="cartItems"></div>
-
-      <!-- Touch 3: 와인 추천 섹션 -->
       <div class="wine-recommend-section">
         <h3>🍷 이 음식들과 잘 어울리는 와인</h3>
         <div id="wineRecommendArea">
@@ -71,7 +61,6 @@
           </div>
         </div>
       </div>
-
       <div class="cart-footer">
         <div class="cart-total">
           <span>합계</span>
